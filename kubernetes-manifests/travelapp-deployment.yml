@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: travelapp
+spec:
+  rules:
+  - host: travelapp.com
+    http:
+      paths:
+      - backend:
+          serviceName: golang-v1
+          servicePort: 8081
+        path: /
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "30"
+  name: travelapp-canary
+spec:
+  rules:
+  - host: travelapp.com
+    http:
+      paths:
+      - backend:
+          serviceName: java-v1
+          servicePort: 8080
+        path: /
